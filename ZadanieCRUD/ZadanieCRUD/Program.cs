@@ -16,7 +16,12 @@ namespace ZadanieCRUD
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            FrmMainView MainView = new FrmMainView();
+            CTransactionList TransactionList = new CTransactionList();
+            CControllerMain ControllerMain = new CControllerMain(MainView, TransactionList);
+
+            Application.Run(MainView);
         }
     }
 }

@@ -12,58 +12,50 @@ using MySql.Data.MySqlClient;
 
 namespace ZadanieCRUD
 {
-    public partial class Form1 : Form
+    public interface IFrmMainView
+    {
+         void AddListener(IControllerMain Controller);
+         void SetDataGridView(DataTable DataSetGridView); 
+    }
+
+
+
+    public partial class FrmMainView : Form, IFrmMainView
     {
 
         string connectionString = @"Server=localhost;Database=rekrutacjadb;Uid=root;Pwd=<KI*(OL>,ki89ol.;";
         private MySqlConnection connection;
         private MySqlDataAdapter mySqlDataAdapter;
 
-        public Form1()
+        IControllerMain Controller;
+
+        public FrmMainView()
         {
             InitializeComponent();
         }
 
+        public void AddListener(IControllerMain Controller_)
+        {
+            this.Controller = Controller_;
+        }
+
+        public void SetDataGridView(DataTable DataSetGridView)
+        {
+            dataGridView1.DataSource = null;
+            dataGridView1.Rows.Clear();
+            dataGridView1.DataSource = DataSetGridView;
+            dataGridView1.Refresh();
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-            string ID = "";
-
-            string server = "localhost";
-            string database = "rekrutacjadb";
-            string uid = "root";
-            string password = "<KI*(OL>,ki89ol.";
-            string connectionString;
-            connectionString = "SERVER=" + server + ";database=RekturacjadB;uid=root;password=" + "<KI*(OL>,ki89ol.";
-
-            connection = new MySqlConnection(connectionString);
-
-            if (this.OpenConnection() == true)
-            {
-                mySqlDataAdapter = new MySqlDataAdapter("select cdb_var from configdb where cdb_table = 'dh_mdokh'", connection);
-                DataSet DS = new DataSet();
-                mySqlDataAdapter.Fill(DS);
-                //MessageBox.Show(DS.Tables[0].Rows[0]["cdb_var"].ToString());
-
-                ID = DS.Tables[0].Rows[0]["cdb_var"].ToString();
-                //close connection
-                this.CloseConnection();
-            }
-
-
-
-
-
-            Form2 Test;
-            Test = new Form2(ID);
-            //Test.MdiParent = this;
-
-            Test.Show();
+            groupBox3.Visible = true;           
         }
 
         private void Form1_Shown(object sender, EventArgs e)
         {
             
-         string server = "localhost";
+         /*   string server = "localhost";
             string database = "rekrutacjadb";
             string uid = "root";
             string password = "<KI*(OL>,ki89ol.";
@@ -81,8 +73,8 @@ namespace ZadanieCRUD
                 dataGridView1.DataSource = DS.Tables[0];
 
                 //close connection
-                this.CloseConnection();
-            }
+                this.CloseConnection();*/
+          //  }
         }
 
         private bool OpenConnection()
@@ -131,14 +123,28 @@ namespace ZadanieCRUD
         }
 
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
 
-        }
 
         private void button2_Click(object sender, EventArgs e)
         {
             MessageBox.Show(dataGridView1.CurrentCell.RowIndex.ToString());
+        }
+
+        private void FrmMainView_Load(object sender, EventArgs e)
+        {
+            Controller.ReadAllTransactionLine();
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            CConnectSQL ConnectSQL = new CConnectSQL();
+            ConnectSQL.InsertData();
+            Controller.ReadAllTransactionLine();
         }
     }
 }

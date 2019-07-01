@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZadanieCRUD.Models
+namespace ZadanieCRUD
 {
     /// <summary>
     /// Klasa odpowiadająca za linie w tabeli pozycji w liniach transakcji - DL_MDOKL

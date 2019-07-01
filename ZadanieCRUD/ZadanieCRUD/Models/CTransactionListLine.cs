@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZadanieCRUD.Models
+namespace ZadanieCRUD
 {
 
     /// <summary>
@@ -16,6 +16,38 @@ namespace ZadanieCRUD.Models
         /// Lista wszystkich pozycji w transakcji
         /// </summary>
         List<CTransactionPosLine> TransactionPosLine;
+
+        public CTransactionListLine()
+        { }
+        /// <summary>
+        /// ID wpisu w tabeli
+        /// </summary>
+        public int ID { get; set; }
+
+        /// <summary>
+        /// Numer artykułu
+        /// </summary>
+        public DateTime Datin { get; set; }
+
+        /// <summary>
+        /// Ilość sztuk
+        /// </summary>
+        public int CustNumber { get; set; }
+
+        /// <summary>
+        /// Ilość sztuk
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Cena netto
+        /// </summary>
+        public double PriceNet { get; set; }
+
+        /// <summary>
+        /// Cena brutto
+        /// </summary>
+        public double PriceBrt { get; set; }
 
     }
 }
