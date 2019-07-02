@@ -41,16 +41,13 @@ namespace ZadanieCRUD
         void NewPositionLineViewON(CTransactionListLine EditListLine);
         void EditPositionListLineViewON(int RowLine);
 
+        void NewPositionListLineViewOF();
     }
 
     
 
     public partial class FrmMainView : Form, IFrmMainView
     {
-
-        string connectionString = @"Server=localhost;Database=rekrutacjadb;Uid=root;Pwd=<KI*(OL>,ki89ol.;";
-        private MySqlConnection connection;
-        private MySqlDataAdapter mySqlDataAdapter;
 
         IControllerMain Controller;
 
@@ -123,11 +120,6 @@ namespace ZadanieCRUD
         }
 
 
-        private void Form1_Shown(object sender, EventArgs e)
-        {
-            
-
-        }
 
 
         private void button2_Click(object sender, EventArgs e)
@@ -140,10 +132,7 @@ namespace ZadanieCRUD
             Controller.ReadAllTransactionLine();
         }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
 
-        }
 
         private void button5_Click(object sender, EventArgs e)
         {
@@ -191,8 +180,7 @@ namespace ZadanieCRUD
         public double ReadTransactionPriceNet()
         {
             double n;
-            bool isDouble = double.TryParse(textBox5.Text.Replace(",", "."), out n);
-            if (isDouble)
+            if (Double.TryParse(textBox5.Text.Replace(",", "."), out n))
             {
                 return Convert.ToDouble(textBox5.Text.Replace(",", "."));
                 
@@ -205,9 +193,8 @@ namespace ZadanieCRUD
         public double ReadTransactionPriceBrt()
         {
             double n;
-            bool isDouble = double.TryParse(textBox6.Text.Replace(",", "."), out n);
             //MessageBox.Show(isDouble.ToString());
-            if (isDouble)
+            if (Double.TryParse(textBox6.Text.Replace(",", "."), out n))
             {
                 
                 return Convert.ToDouble(textBox6.Text.Replace(",", "."));
@@ -222,10 +209,7 @@ namespace ZadanieCRUD
             return Convert.ToDateTime(dateTimePicker1.Value);
 
         }
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
 
-        }
 
         private void button4_Click(object sender, EventArgs e)
         {
@@ -242,15 +226,7 @@ namespace ZadanieCRUD
                 Controller.DeleteTransactionListLineViewON(dataGridView1.CurrentCell.RowIndex);
         }
 
-        private void textBox7_TextChanged(object sender, EventArgs e)
-        {
 
-        }
-
-        private void label7_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void button11_Click(object sender, EventArgs e)
         {
@@ -329,9 +305,8 @@ namespace ZadanieCRUD
         public double ReadPositionPriceNet()
         {
             double n;
-            bool isDouble = double.TryParse(textBox7.Text.Replace(",", "."), out n);
             //MessageBox.Show(isDouble.ToString());
-            if (isDouble)
+            if (Double.TryParse(textBox7.Text.Replace(",", "."), out n))
             {
 
                 return Convert.ToDouble(textBox7.Text.Replace(",", "."));
@@ -344,9 +319,8 @@ namespace ZadanieCRUD
         public double ReadPositionPriceBrt()
         {
             double n;
-            bool isDouble = double.TryParse(textBox3.Text.Replace(",", "."), out n);
             //MessageBox.Show(isDouble.ToString());
-            if (isDouble)
+            if (Double.TryParse(textBox3.Text.Replace(",", "."), out n))
             {
 
                 return Convert.ToDouble(textBox3.Text.Replace(",", "."));
@@ -357,20 +331,7 @@ namespace ZadanieCRUD
             }
         }
 
-        private void textBox10_TextChanged(object sender, EventArgs e)
-        {
 
-        }
-
-        private void textBox8_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox9_TextChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void button6_Click(object sender, EventArgs e)
         {           
@@ -393,6 +354,29 @@ namespace ZadanieCRUD
             textBox8.Text = dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_artname"].Value.ToString();
             textBox7.Text = Convert.ToDouble(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_pricenet"].Value).ToString();
             textBox3.Text = Convert.ToDouble(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_pricebrt"].Value).ToString();
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            
+            double val;
+            if (Double.TryParse(textBox6.Text, out val))
+            {
+                MessageBox.Show("Liczba");
+            }
+
+
+
+            }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            Controller.NewPositionListLineViewOF();
+        }
+
+        public void NewPositionListLineViewOF() {
+            groupBox4.Visible = false;
+
         }
     }
 }

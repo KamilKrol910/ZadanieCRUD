@@ -77,10 +77,6 @@ namespace ZadanieCRUD
 
         private void SaveTableAsList (DataTable ReadTable)
         {
-            //if (TransactionListLine != null)
-           // { TransactionListLine.Clear(); }
-            
-
             foreach (DataRow dr2 in ReadTable.Rows)
             {
                 if (!DBNull.Value.Equals(dr2["dh_id"]))
@@ -95,24 +91,6 @@ namespace ZadanieCRUD
                 }
                 
             }
-            // try
-            // {
-            /*    TransactionListLine = (from DataRow dr in ReadTable.Rows                       
-                                       select new CTransactionListLine()
-                                       {
-                                           ID = CheckInt32Obj(dr["dh_id"]),
-                                          // Datin = CheckDateTimeObj(dr["dh_datin"]),
-                                           CustNumber = CheckInt32Obj(dr["dh_custnr"]),
-                                           Name = CheckStringObj(dr["dh_name"]),
-                                           PriceNet = CheckDoubleObj(dr["dh_pricenet"]),
-                                           PriceBrt = CheckDoubleObj(dr["dh_pricebrt"])
-                                       }).ToList();*/
-            /*  }
-              catch (Exception e)
-              {
-                  MessageBox.Show("Błąd podczas konwersji danych z db");
-              }*/
-           // MessageBox.Show("pobrane");
 
         }
 

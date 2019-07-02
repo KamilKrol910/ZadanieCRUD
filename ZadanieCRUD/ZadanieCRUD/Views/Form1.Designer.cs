@@ -257,7 +257,6 @@
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 41;
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // label6
             // 
@@ -313,7 +312,6 @@
             this.label2.Size = new System.Drawing.Size(30, 13);
             this.label2.TabIndex = 31;
             this.label2.Text = "Data";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label1
             // 
@@ -383,7 +381,6 @@
             this.textBox7.Size = new System.Drawing.Size(100, 20);
             this.textBox7.TabIndex = 41;
             this.textBox7.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBox7.TextChanged += new System.EventHandler(this.textBox7_TextChanged);
             // 
             // label7
             // 
@@ -393,7 +390,6 @@
             this.label7.Size = new System.Drawing.Size(62, 13);
             this.label7.TabIndex = 39;
             this.label7.Text = "Cena brutto";
-            this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
             // label8
             // 
@@ -411,7 +407,6 @@
             this.textBox8.Size = new System.Drawing.Size(100, 20);
             this.textBox8.TabIndex = 43;
             this.textBox8.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBox8.TextChanged += new System.EventHandler(this.textBox8_TextChanged);
             // 
             // label9
             // 
@@ -438,7 +433,6 @@
             this.textBox9.Size = new System.Drawing.Size(100, 20);
             this.textBox9.TabIndex = 43;
             this.textBox9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBox9.TextChanged += new System.EventHandler(this.textBox9_TextChanged);
             // 
             // button10
             // 
@@ -468,6 +462,7 @@
             this.button12.TabIndex = 45;
             this.button12.Text = "Anuluj";
             this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.button12_Click);
             // 
             // label11
             // 
@@ -486,7 +481,6 @@
             this.textBox10.Size = new System.Drawing.Size(100, 20);
             this.textBox10.TabIndex = 43;
             this.textBox10.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBox10.TextChanged += new System.EventHandler(this.textBox10_TextChanged);
             // 
             // label12
             // 
@@ -516,7 +510,6 @@
             this.Name = "FrmMainView";
             this.Text = "Zadanie Rekrutacyjne CRUD";
             this.Load += new System.EventHandler(this.FrmMainView_Load);
-            this.Shown += new System.EventHandler(this.Form1_Shown);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox3.ResumeLayout(false);
