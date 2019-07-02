@@ -15,8 +15,8 @@ namespace ZadanieCRUD
     public interface IFrmMainView
     {
          void AddListener(IControllerMain Controller);
-         void SetDataGridView(DataTable DataSetGridView);
-
+         void SetDataGridView1(DataTable DataSetGridView);
+        void SetDataGridView2(DataTable DataSetGridView);
 
         void NewTransactionListLineViewON(int NewID);
         void NewTransactionListLineViewOF();
@@ -31,7 +31,15 @@ namespace ZadanieCRUD
         double ReadTransactionPriceBrt();
         DateTime ReadTransactionDate();
 
+        int ReadPositionID();
+        int ReadPosTrID();
+        string ReadArtNumber();
+        int ReadPositionQuantity();
+        double ReadPositionPriceNet();
+        double ReadPositionPriceBrt();
 
+        void NewPositionLineViewON(CTransactionListLine EditListLine);
+        void EditPositionListLineViewON(int RowLine);
 
     }
 
@@ -56,12 +64,20 @@ namespace ZadanieCRUD
             this.Controller = Controller_;
         }
 
-        public void SetDataGridView(DataTable DataSetGridView)
+        public void SetDataGridView1(DataTable DataSetGridView)
         {
             dataGridView1.DataSource = null;
             dataGridView1.Rows.Clear();
             dataGridView1.DataSource = DataSetGridView;
             dataGridView1.Refresh();
+        }
+
+        public void SetDataGridView2(DataTable DataSetGridView)
+        {
+            dataGridView2.DataSource = null;
+            dataGridView2.Rows.Clear();
+            dataGridView2.DataSource = DataSetGridView;
+            dataGridView2.Refresh();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -75,6 +91,7 @@ namespace ZadanieCRUD
         {
             groupBox3.Visible = true;
             groupBox2.Visible = false;
+            groupBox4.Visible = false;
             button5.Visible = true;
             button4.Visible = false;
             textBox1.Text = NewID.ToString();
@@ -84,20 +101,18 @@ namespace ZadanieCRUD
 
        public void EditTransactionListLineViewON(CTransactionListLine EditListLine)
         {
-
             groupBox3.Visible = true;
-            groupBox2.Visible = false;
+            groupBox2.Visible = true;
             button5.Visible = false;
             button4.Visible = true;
+            groupBox4.Visible = false;
             textBox1.Text = EditListLine.ID.ToString();
             textBox2.Text = EditListLine.CustNumber.ToString();
             textBox4.Text = EditListLine.Name.ToString();
             textBox5.Text = EditListLine.PriceNet.ToString();
             textBox6.Text = EditListLine.PriceBrt.ToString();
             if (EditListLine.Datin > DateTime.MinValue)
-            { dateTimePicker1.Value = EditListLine.Datin; }
-            
-
+            { dateTimePicker1.Value = EditListLine.Datin; }           
         }
 
         public void NewTransactionListLineViewOF()
@@ -105,7 +120,6 @@ namespace ZadanieCRUD
             groupBox3.Visible = false;
             groupBox2.Visible = false;
             textBox1.Text = "";
-
         }
 
 
@@ -114,53 +128,6 @@ namespace ZadanieCRUD
             
 
         }
-
-        private bool OpenConnection()
-        {
-            try
-            {
-                connection.Open();
-                return true;
-            }
-            catch (MySqlException ex)
-            {
-                //When handling errors, you can your application's response based on the error number.
-                //The two most common error numbers when connecting are as follows:
-                //0: Cannot connect to server.
-                //1045: Invalid user name and/or password.
-                switch (ex.Number)
-                {
-                    case 0:
-                        MessageBox.Show("Cannot connect to server. Contact administrator");
-                        break;
-                    case 1045:
-                        MessageBox.Show("Invalid username/password, please try again");
-                        break;
-                    default:
-                        MessageBox.Show(ex.Message);
-                        break;
-                }
-                return false;
-            }
-        }
-
-
-        //Close connection
-        private bool CloseConnection()
-        {
-            try
-            {
-                connection.Close();
-                return true;
-            }
-            catch (MySqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-                return false;
-            }
-        }
-
-
 
 
         private void button2_Click(object sender, EventArgs e)
@@ -273,6 +240,159 @@ namespace ZadanieCRUD
         private void button3_Click(object sender, EventArgs e)
         {        
                 Controller.DeleteTransactionListLineViewON(dataGridView1.CurrentCell.RowIndex);
+        }
+
+        private void textBox7_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            Controller.EditPositionListLine();
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            Controller.NewPositionLineViewON(dataGridView1.CurrentCell.RowIndex);
+        }
+
+
+        public void NewPositionLineViewON(CTransactionListLine EditListLine)
+        {
+            groupBox4.Visible = true;
+            button10.Visible = true;
+            button11.Visible = false;
+
+            textBox11.Text = EditListLine.ID.ToString();
+            if (EditListLine.TransactionPosLine.Count ==0)
+            {
+                textBox10.Text = "1";
+            }
+            else
+            {
+                textBox10.Text = (EditListLine.TransactionPosLine[EditListLine.TransactionPosLine.Count - 1].MaxID+1).ToString();
+            }
+
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            Controller.NewPositionListLine();
+        }
+
+        public int ReadPositionID() {
+            int n;
+            bool isNumeric = int.TryParse(textBox10.Text, out n);
+            if (isNumeric)
+            {
+                return Convert.ToInt32(textBox10.Text);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        public int ReadPosTrID() {
+            int n;
+            bool isNumeric = int.TryParse(textBox11.Text, out n);
+            if (isNumeric)
+            {
+                return Convert.ToInt32(textBox11.Text);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        public string ReadArtNumber() {
+            return textBox8.Text;
+        }
+        public int ReadPositionQuantity()
+        {
+            int n;
+            bool isNumeric = int.TryParse(textBox9.Text, out n);
+            if (isNumeric)
+            {
+                return Convert.ToInt32(textBox9.Text);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        public double ReadPositionPriceNet()
+        {
+            double n;
+            bool isDouble = double.TryParse(textBox7.Text.Replace(",", "."), out n);
+            //MessageBox.Show(isDouble.ToString());
+            if (isDouble)
+            {
+
+                return Convert.ToDouble(textBox7.Text.Replace(",", "."));
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        public double ReadPositionPriceBrt()
+        {
+            double n;
+            bool isDouble = double.TryParse(textBox3.Text.Replace(",", "."), out n);
+            //MessageBox.Show(isDouble.ToString());
+            if (isDouble)
+            {
+
+                return Convert.ToDouble(textBox3.Text.Replace(",", "."));
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        private void textBox10_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox8_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox9_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {           
+             Controller.DeletePositionListLineViewON(Convert.ToInt32(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_id"].Value));
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            Controller.EditPositionListLineViewON(Convert.ToInt32(dataGridView2.CurrentCell.RowIndex));
+        }
+
+       public void EditPositionListLineViewON (int RowLine)
+        {
+            groupBox4.Visible = true;
+            button11.Visible = true;
+            button10.Visible = false;
+            textBox10.Text =  Convert.ToInt32(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_id"].Value).ToString();
+            textBox11.Text = Convert.ToInt32(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_dhid"].Value).ToString();
+            textBox9.Text = Convert.ToInt32(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_qua"].Value).ToString();
+            textBox8.Text = dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_artname"].Value.ToString();
+            textBox7.Text = Convert.ToDouble(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_pricenet"].Value).ToString();
+            textBox3.Text = Convert.ToDouble(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_pricebrt"].Value).ToString();
         }
     }
 }

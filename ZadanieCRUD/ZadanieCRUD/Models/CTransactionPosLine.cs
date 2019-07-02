@@ -9,7 +9,7 @@ namespace ZadanieCRUD
     /// <summary>
     /// Klasa odpowiadająca za linie w tabeli pozycji w liniach transakcji - DL_MDOKL
     /// </summary>
-    class CTransactionPosLine
+    public class CTransactionPosLine
     {
         
         /// <summary>
@@ -30,12 +30,17 @@ namespace ZadanieCRUD
         /// <summary>
         /// Cena netto
         /// </summary>
-        public float PriceNet { get; set; }
+        public double PriceNet { get; set; }
 
         /// <summary>
         /// Cena brutto
         /// </summary>
-        public float ProceBrt { get; set; }
+        public double PriceBrt { get; set; }
+
+        /// <summary>
+        /// maksymalne id w tabeli
+        /// </summary>
+        public int MaxID { get; set; }
 
     }
 }

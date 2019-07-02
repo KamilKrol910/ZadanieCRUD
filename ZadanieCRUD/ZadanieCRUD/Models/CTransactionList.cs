@@ -11,16 +11,22 @@ namespace ZadanieCRUD
     public interface ITransactionList
     {
         DataTable ReadList();
+        DataTable ReadPosList(int RowLine);
 
         int ReadLastIndexTransaction();
 
         bool CreateListLine(int ID, DateTime DATIN, string Name, int CustNR, double PriceNET, double PriceBRT);
+        bool CreatePosLine(int ID, int MAINID, string ArtName, int Quantity, double PriceNet, double PriceBrt);
+
+
 
         bool EditListLine(int ID, DateTime DATIN, string Name, int CustNR, double PriceNET, double PriceBRT);
-
+        bool EditPosLine(int ID, int MAINID, string ArtName, int Quantity, double PriceNet, double PriceBrt);
         CTransactionListLine GetTransactionList(int RowLine);
 
         bool DeleteListLine(int RowLine);
+        bool DeletePosLine(int RowLine);
+        
 
     }
 
@@ -45,8 +51,16 @@ namespace ZadanieCRUD
             return ReadListTable;
         }
 
+        public DataTable ReadPosList(int RowLine)
+        {
+            DataTable ReadListTable = null;
 
-        public CTransactionListLine GetTransactionList(int RowLine)
+            ReadListTable = TransactionListLine[RowLine].ReadPosList();
+
+            return ReadListTable;
+        }
+
+            public CTransactionListLine GetTransactionList(int RowLine)
         {
             return TransactionListLine[RowLine];
 
@@ -77,8 +91,9 @@ namespace ZadanieCRUD
                     if (!DBNull.Value.Equals(dr2["dh_name"])) { TransactionListLine[TransactionListLine.Count - 1].Name = dr2["dh_name"].ToString(); }
                     if (!DBNull.Value.Equals(dr2["dh_pricenet"])) { TransactionListLine[TransactionListLine.Count - 1].PriceNet = Convert.ToDouble(dr2["dh_pricenet"]); }
                     if (!DBNull.Value.Equals(dr2["dh_pricebrt"])) { TransactionListLine[TransactionListLine.Count - 1].PriceBrt = Convert.ToDouble(dr2["dh_pricebrt"]); ; }
+                    ReadPosList(TransactionListLine.Count - 1);
                 }
-            
+                
             }
             // try
             // {
@@ -118,8 +133,25 @@ namespace ZadanieCRUD
                 CConnectSQL ConnectSQL = new CConnectSQL();
                 return ConnectSQL.InsertData(Request);
             }
+        }
+
+
+        public bool CreatePosLine(int ID, int MAINID, string ArtName, int Quantity, double PriceNet, double PriceBrt) {
+            if (ID == 0)
+            {
+                return false;
+            }
+            else
+            {
+                string Request = "insert into dl_mdokl(dl_id, dl_artname, dl_qua, dl_dhid , dl_pricenet, dl_pricebrt) values(" + ID + ",'" + ArtName + "'," + Quantity + "," + MAINID + " ," + PriceNet + "," + PriceBrt + ");";
+                CConnectSQL ConnectSQL = new CConnectSQL();
+                return ConnectSQL.InsertData(Request);
+            }
 
         }
+
+
+
         public bool EditListLine (int ID, DateTime DATIN, string Name, int CustNR, double PriceNET, double PriceBRT) {
             if (ID == 0)
             {
@@ -133,6 +165,25 @@ namespace ZadanieCRUD
             }
             
         }
+
+        public bool EditPosLine(int ID, int MAINID, string ArtName, int Quantity, double PriceNet, double PriceBrt)
+        {
+            if (ID == 0)
+            {
+                return false;
+            }
+            else
+            {
+                string Request = "Update dl_mdokl SET dl_id = " + ID + " , dl_dhid = " + MAINID + ", dl_artname = '" + ArtName + "', dl_qua = " + Quantity + " , dl_pricenet = " + PriceNet + ", dl_pricebrt = " + PriceBrt + " where dl_id = " + ID + " ;";
+                CConnectSQL ConnectSQL = new CConnectSQL();
+                return ConnectSQL.InsertData(Request);
+            }
+
+
+
+        }
+
+
         public bool DeleteListLine(int RowLine) {
             int DeletedID = TransactionListLine[RowLine].ID;
 
@@ -151,7 +202,29 @@ namespace ZadanieCRUD
 
         }
 
+        
 
-         
+
+                    public bool DeletePosLine(int RowLine)
+        {
+            int DeletedID = RowLine;
+
+            if (DeletedID == 0)
+            {
+                return false;
+            }
+            else
+            {
+                string Request = "DELETE FROM dl_mdokl WHERE dl_id = " + DeletedID + ";";
+                CConnectSQL ConnectSQL = new CConnectSQL();
+                return ConnectSQL.InsertData(Request);
+            }
+
+
+
+        }
+
+
+
     }
 }

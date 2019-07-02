@@ -12,10 +12,7 @@ namespace ZadanieCRUD
     class CConnectSQL
     {
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private string connectionString = @"Server=localhost;Database=rekrutacjadb;Uid=root;Pwd=<KI*(OL>,ki89ol.;";
+
 
         /// <summary>
         /// 
@@ -43,13 +40,8 @@ namespace ZadanieCRUD
         {
             DataTable Result = null;
 
-
-            string server = "localhost";
-            string database = "rekrutacjadb";
-            string uid = "root";
-            string password = "<KI*(OL>,ki89ol.";
             string connectionString;
-            connectionString = "SERVER=" + server + ";database=RekturacjadB;uid=root;password=" + "<KI*(OL>,ki89ol.";
+            connectionString = "SERVER=localhost;database=RekturacjadB;uid=root;password=" + "!QAZxsw2";
 
             connection = new MySqlConnection(connectionString);
 
@@ -80,7 +72,7 @@ namespace ZadanieCRUD
             try
             {
                 //This is my connection string i have assigned the database file address path  
-                string MyConnection2 = "datasource=localhost;database=RekturacjadB;username=root;password=<KI*(OL>,ki89ol.";
+                string MyConnection2 = "datasource=localhost;database=RekturacjadB;username=root;password=!QAZxsw2";
                 //This is my insert query in which i am taking input from the user through windows forms  
                 string Query = Query_;
                 //This is  MySqlConnection here i have created the object and pass my connection string.  

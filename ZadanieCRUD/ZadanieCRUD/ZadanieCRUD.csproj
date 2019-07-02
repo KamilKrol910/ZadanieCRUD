@@ -49,11 +49,9 @@
   <ItemGroup>
     <Compile Include="Controllers\CControllerMain.cs" />
     <Compile Include="Models\CConnectSQL.cs" />
-    <Compile Include="Models\CNewTransactionLine.cs" />
     <Compile Include="Models\CTransactionListLine.cs" />
     <Compile Include="Models\CTransactionList.cs" />
     <Compile Include="Models\CTransactionPosLine.cs" />
-    <Compile Include="Models\SQLConnectParam.cs" />
     <Compile Include="Views\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
