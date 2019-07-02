@@ -10,7 +10,7 @@ namespace ZadanieCRUD
     /// <summary>
     /// Klasa odpowiadająca za linie w tabeli transakcji - DH_MDOKH
     /// </summary>
-    class CTransactionListLine
+    public class CTransactionListLine
     {
         /// <summary>
         /// Lista wszystkich pozycji w transakcji
@@ -18,7 +18,13 @@ namespace ZadanieCRUD
         List<CTransactionPosLine> TransactionPosLine;
 
         public CTransactionListLine()
-        { }
+        {
+            ID = 0;
+            CustNumber = 0;
+            Name = "";
+            PriceNet = 0;
+            PriceBrt = 0;
+        }
         /// <summary>
         /// ID wpisu w tabeli
         /// </summary>

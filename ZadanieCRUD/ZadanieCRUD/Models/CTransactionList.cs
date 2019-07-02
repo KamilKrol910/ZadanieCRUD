@@ -11,9 +11,16 @@ namespace ZadanieCRUD
     public interface ITransactionList
     {
         DataTable ReadList();
-        void CreateListLine();
-        void EditListLine();
-        void DeleteListLine();
+
+        int ReadLastIndexTransaction();
+
+        bool CreateListLine(int ID, DateTime DATIN, string Name, int CustNR, double PriceNET, double PriceBRT);
+
+        bool EditListLine(int ID, DateTime DATIN, string Name, int CustNR, double PriceNET, double PriceBRT);
+
+        CTransactionListLine GetTransactionList(int RowLine);
+
+        bool DeleteListLine(int RowLine);
 
     }
 
@@ -27,6 +34,7 @@ namespace ZadanieCRUD
         /// </summary>
         public List<CTransactionListLine> TransactionListLine = new List<CTransactionListLine>();
 
+
         public DataTable ReadList() {
             DataTable ReadListTable = null;
 
@@ -35,6 +43,22 @@ namespace ZadanieCRUD
             SaveTableAsList(ReadListTable);
        
             return ReadListTable;
+        }
+
+
+        public CTransactionListLine GetTransactionList(int RowLine)
+        {
+            return TransactionListLine[RowLine];
+
+        }
+
+        public int ReadLastIndexTransaction()
+        {
+            if (TransactionListLine.Count == 0)
+            { return 0; }
+            else
+            { return TransactionListLine[TransactionListLine.Count - 1].ID; }
+
         }
 
         private void SaveTableAsList (DataTable ReadTable)
@@ -47,16 +71,14 @@ namespace ZadanieCRUD
             {
                 if (!DBNull.Value.Equals(dr2["dh_id"]))
                 {
-                    TransactionListLine.Add(new CTransactionListLine());
+                    TransactionListLine.Add(new CTransactionListLine() { ID = Convert.ToInt32(dr2["dh_id"])});
                     if (!DBNull.Value.Equals(dr2["dh_datin"])) { TransactionListLine[TransactionListLine.Count - 1].Datin = Convert.ToDateTime(dr2["dh_datin"]); }
                     if (!DBNull.Value.Equals(dr2["dh_custnr"])) { TransactionListLine[TransactionListLine.Count - 1].CustNumber = Convert.ToInt32(dr2["dh_custnr"]); }
                     if (!DBNull.Value.Equals(dr2["dh_name"])) { TransactionListLine[TransactionListLine.Count - 1].Name = dr2["dh_name"].ToString(); }
                     if (!DBNull.Value.Equals(dr2["dh_pricenet"])) { TransactionListLine[TransactionListLine.Count - 1].PriceNet = Convert.ToDouble(dr2["dh_pricenet"]); }
                     if (!DBNull.Value.Equals(dr2["dh_pricebrt"])) { TransactionListLine[TransactionListLine.Count - 1].PriceBrt = Convert.ToDouble(dr2["dh_pricebrt"]); ; }
                 }
- 
-
-                
+            
             }
             // try
             // {
@@ -79,61 +101,55 @@ namespace ZadanieCRUD
 
         }
 
-       private int CheckInt32Obj (Object IntVar)
-        {
-            MessageBox.Show("IntVAR" + IntVar.ToString());
-            if (IntVar==null)
+      
+
+
+      
+
+
+        public bool CreateListLine(int ID, DateTime DATIN, string Name, int CustNR, double PriceNET, double PriceBRT) {
+            if (ID ==0 )
             {
-                return 0;
+                return false;
             }
             else
             {
-                return Convert.ToInt32(IntVar);
+                string Request = "insert into dh_mdokh(dh_id,dh_datin, dh_name, dh_custnr , dh_pricenet, dh_pricebrt) values(" + ID + ",'" + DATIN + "','"+ Name + "',"+ CustNR +" ,"+ PriceNET + "," + PriceBRT + ");";
+                CConnectSQL ConnectSQL = new CConnectSQL();
+                return ConnectSQL.InsertData(Request);
             }
-        }
 
-        private double CheckDoubleObj (Object IntVar)
-        {
-            if (IntVar == null)
+        }
+        public bool EditListLine (int ID, DateTime DATIN, string Name, int CustNR, double PriceNET, double PriceBRT) {
+            if (ID == 0)
             {
-                return 0;
+                return false;
+            }
+            else
+            {               
+                string Request = "Update dh_mdokh SET dh_id = "+ ID + " , dh_datin = '" + DATIN + "', dh_name = '"+ Name + "', dh_custnr = " + CustNR + " , dh_pricenet = " + PriceNET + ", dh_pricebrt = " + PriceBRT + " where dh_id = " + ID + " ;";
+                CConnectSQL ConnectSQL = new CConnectSQL();
+                return ConnectSQL.InsertData(Request);
+            }
+            
+        }
+        public bool DeleteListLine(int RowLine) {
+            int DeletedID = TransactionListLine[RowLine].ID;
+
+            if (DeletedID == 0 )
+            {
+                return false;
             }
             else
             {
-                return Convert.ToDouble(IntVar);
+                string Request = "DELETE FROM dh_mdokh WHERE dh_id = " + DeletedID + ";";
+                CConnectSQL ConnectSQL = new CConnectSQL();
+                return ConnectSQL.InsertData(Request);
             }
+
+
+
         }
-
-
-        private string CheckStringObj(Object IntVar)
-        {
-            if (IntVar == null)
-            {
-                return "";
-            }
-            else
-            {
-                return IntVar.ToString();
-            }
-        }
-
-        private DateTime CheckDateTimeObj(Object IntVar)
-        {
-            if (IntVar == null)
-            {
-                return DateTime.MaxValue;
-            }
-            else
-            {
-                return Convert.ToDateTime(IntVar);
-
-                
-            }
-        }
-
-        public void CreateListLine() { }
-        public void EditListLine() { }
-        public void DeleteListLine() { }
 
 
          

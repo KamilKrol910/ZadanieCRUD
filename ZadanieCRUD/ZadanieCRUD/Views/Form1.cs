@@ -15,10 +15,27 @@ namespace ZadanieCRUD
     public interface IFrmMainView
     {
          void AddListener(IControllerMain Controller);
-         void SetDataGridView(DataTable DataSetGridView); 
+         void SetDataGridView(DataTable DataSetGridView);
+
+
+        void NewTransactionListLineViewON(int NewID);
+        void NewTransactionListLineViewOF();
+
+        void EditTransactionListLineViewON(CTransactionListLine EditListLine);
+
+
+        int ReadTransactionID();
+        string ReadTransactionName();
+        int ReadTransactionCustNr();
+        double ReadTransactionPriceNet();
+        double ReadTransactionPriceBrt();
+        DateTime ReadTransactionDate();
+
+
+
     }
 
-
+    
 
     public partial class FrmMainView : Form, IFrmMainView
     {
@@ -49,32 +66,53 @@ namespace ZadanieCRUD
 
         private void button1_Click(object sender, EventArgs e)
         {
-            groupBox3.Visible = true;           
+
+            Controller.NewTransactionListLineViewON();
+                     
         }
+
+        public void NewTransactionListLineViewON(int NewID)
+        {
+            groupBox3.Visible = true;
+            groupBox2.Visible = false;
+            button5.Visible = true;
+            button4.Visible = false;
+            textBox1.Text = NewID.ToString();
+
+        }
+
+
+       public void EditTransactionListLineViewON(CTransactionListLine EditListLine)
+        {
+
+            groupBox3.Visible = true;
+            groupBox2.Visible = false;
+            button5.Visible = false;
+            button4.Visible = true;
+            textBox1.Text = EditListLine.ID.ToString();
+            textBox2.Text = EditListLine.CustNumber.ToString();
+            textBox4.Text = EditListLine.Name.ToString();
+            textBox5.Text = EditListLine.PriceNet.ToString();
+            textBox6.Text = EditListLine.PriceBrt.ToString();
+            if (EditListLine.Datin > DateTime.MinValue)
+            { dateTimePicker1.Value = EditListLine.Datin; }
+            
+
+        }
+
+        public void NewTransactionListLineViewOF()
+        {
+            groupBox3.Visible = false;
+            groupBox2.Visible = false;
+            textBox1.Text = "";
+
+        }
+
 
         private void Form1_Shown(object sender, EventArgs e)
         {
             
-         /*   string server = "localhost";
-            string database = "rekrutacjadb";
-            string uid = "root";
-            string password = "<KI*(OL>,ki89ol.";
-            string connectionString;
-            connectionString = "SERVER=" + server + ";database=RekturacjadB;uid=root;password=" + "<KI*(OL>,ki89ol.";
 
-            connection = new MySqlConnection(connectionString);
-
-            if (this.OpenConnection() == true)
-            {
-                mySqlDataAdapter = new MySqlDataAdapter("select * from configdb", connection);
-                DataSet DS = new DataSet();
-                mySqlDataAdapter.Fill(DS);
-                //MessageBox.Show(DS.Tables[0].Rows[0]["cdb_var"].ToString());
-                dataGridView1.DataSource = DS.Tables[0];
-
-                //close connection
-                this.CloseConnection();*/
-          //  }
         }
 
         private bool OpenConnection()
@@ -127,7 +165,7 @@ namespace ZadanieCRUD
 
         private void button2_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(dataGridView1.CurrentCell.RowIndex.ToString());
+           Controller.EditTransactionListLineViewON(dataGridView1.CurrentCell.RowIndex);
         }
 
         private void FrmMainView_Load(object sender, EventArgs e)
@@ -142,9 +180,99 @@ namespace ZadanieCRUD
 
         private void button5_Click(object sender, EventArgs e)
         {
-            CConnectSQL ConnectSQL = new CConnectSQL();
-            ConnectSQL.InsertData();
-            Controller.ReadAllTransactionLine();
+            Controller.NewTransactionListLine();
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            Controller.NewTransactionListLineViewOF();
+        }
+
+
+
+       public int ReadTransactionID(){
+            int n;
+            bool isNumeric = int.TryParse(textBox1.Text, out n);
+            if (isNumeric)
+            {
+                return Convert.ToInt32(textBox1.Text);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        public string ReadTransactionName()
+        {
+            return textBox4.Text;
+        }
+
+        public int ReadTransactionCustNr()
+        {
+            int n;
+            bool isNumeric = int.TryParse(textBox2.Text, out n);
+            if (isNumeric)
+            {
+                return Convert.ToInt32(textBox2.Text);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public double ReadTransactionPriceNet()
+        {
+            double n;
+            bool isDouble = double.TryParse(textBox5.Text.Replace(",", "."), out n);
+            if (isDouble)
+            {
+                return Convert.ToDouble(textBox5.Text.Replace(",", "."));
+                
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        public double ReadTransactionPriceBrt()
+        {
+            double n;
+            bool isDouble = double.TryParse(textBox6.Text.Replace(",", "."), out n);
+            //MessageBox.Show(isDouble.ToString());
+            if (isDouble)
+            {
+                
+                return Convert.ToDouble(textBox6.Text.Replace(",", "."));
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        public DateTime ReadTransactionDate()
+        {
+            return Convert.ToDateTime(dateTimePicker1.Value);
+
+        }
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Controller.EditTransactionListLine();
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {        
+                Controller.DeleteTransactionListLineViewON(dataGridView1.CurrentCell.RowIndex);
         }
     }
 }
