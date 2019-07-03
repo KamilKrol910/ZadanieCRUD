@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ZadanieCRUD
 {
@@ -25,6 +26,7 @@ namespace ZadanieCRUD
             Name = "";
             PriceNet = 0;
             PriceBrt = 0;
+            MaxID = 0;
         }
         /// <summary>
         /// ID wpisu w tabeli
@@ -56,8 +58,10 @@ namespace ZadanieCRUD
         /// </summary>
         public double PriceBrt { get; set; }
 
-
-
+        /// <summary>
+        /// maksymalne id w tabeli
+        /// </summary>
+        public int MaxID { get; set; }
 
 
         public DataTable ReadPosList()
@@ -67,7 +71,8 @@ namespace ZadanieCRUD
 
             CConnectSQL ConnectSQL = new CConnectSQL();
             ReadListTable = ConnectSQL.SQLReadData("select dl_id, dl_artname, dl_qua, dl_pricenet, dl_pricebrt, dl_dhid, MAX(dl_id) as maxID from dl_mdokl where dl_dhid = " + ID + " GROUP BY dl_id order by dl_id ");
-            SaveTableAsList(ReadListTable); 
+            SaveTableAsList(ReadListTable);
+            ReadMaxID();
             return ReadListTable;
         }
 
@@ -91,7 +96,24 @@ namespace ZadanieCRUD
 
 
         }
+
+        private void ReadMaxID ()
+        {
+            DataTable ReadListTable = null;
+
+            CConnectSQL ConnectSQL = new CConnectSQL();
+            ReadListTable = ConnectSQL.SQLReadData("select MAX(dl_id) as maxID from dl_mdokl GROUP BY dl_id order by dl_id ");
+
+            foreach (DataRow dr2 in ReadListTable.Rows)
+            {
+                if (!DBNull.Value.Equals(dr2["maxID"]))
+                {
+                    MaxID = Convert.ToInt32(dr2["maxID"]);
+                }
+            }
+           
     }
+        }
 }
 
 

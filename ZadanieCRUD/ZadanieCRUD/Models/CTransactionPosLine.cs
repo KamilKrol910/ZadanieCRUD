@@ -11,7 +11,11 @@ namespace ZadanieCRUD
     /// </summary>
     public class CTransactionPosLine
     {
-        
+        public CTransactionPosLine()
+        {
+            ID = 0;
+            MaxID = 0;
+        }
         /// <summary>
         /// ID wpisu w tabeli
         /// </summary>

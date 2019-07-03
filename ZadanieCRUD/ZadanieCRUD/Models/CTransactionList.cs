@@ -62,6 +62,7 @@ namespace ZadanieCRUD
 
             public CTransactionListLine GetTransactionList(int RowLine)
         {
+            TransactionListLine[RowLine].ReadPosList();
             return TransactionListLine[RowLine];
 
         }

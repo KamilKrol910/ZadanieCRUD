@@ -77,7 +77,10 @@ namespace ZadanieCRUD
         //Do edycji linii transakcji
         private void button2_Click(object sender, EventArgs e)
         {
-            Controller.EditTransactionListLineViewON(dataGridView1.CurrentCell.RowIndex);
+            if (dataGridView1.CurrentCell != null)
+            {
+                Controller.EditTransactionListLineViewON(dataGridView1.CurrentCell.RowIndex);
+            }
         }
 
         //Do usunięcia linii transakcji
@@ -101,7 +104,9 @@ namespace ZadanieCRUD
         //edycja pozycji transakcji
         private void button7_Click(object sender, EventArgs e)
         {
-            Controller.EditPositionListLineViewON(Convert.ToInt32(dataGridView2.CurrentCell.RowIndex));
+            if (dataGridView2.CurrentCell != null)
+            { Controller.EditPositionListLineViewON(Convert.ToInt32(dataGridView2.CurrentCell.RowIndex)); }
+
         }
 
         //usunięcie linii transakcji
@@ -184,14 +189,18 @@ namespace ZadanieCRUD
             button11.Visible = false;
 
             textBox11.Text = EditListLine.ID.ToString();
-            if (EditListLine.TransactionPosLine.Count == 0)
+            if (EditListLine.MaxID == 0)
             {
                 textBox10.Text = "1";
             }
             else
             {
-                textBox10.Text = (EditListLine.TransactionPosLine[EditListLine.TransactionPosLine.Count - 1].MaxID + 1).ToString();
-            }
+                textBox10.Text = (EditListLine.MaxID + 1).ToString();
+             }
+
+            textBox9.Text = "";
+            textBox7.Text = "";
+            textBox3.Text = "";
         }
 
         //Uzupełnie pól edycji transakcji na bazie zaznaczonego rekordu
@@ -215,15 +224,19 @@ namespace ZadanieCRUD
         //Uzupełnie pól edycji pozycji transakcji na bazie zaznaczonego rekordu
         public void EditPositionListLineViewON(int RowLine)
         {
-            groupBox4.Visible = true;
-            button11.Visible = true;
-            button10.Visible = false;
-            textBox10.Text = Convert.ToInt32(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_id"].Value).ToString();
-            textBox11.Text = Convert.ToInt32(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_dhid"].Value).ToString();
-            textBox9.Text = Convert.ToInt32(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_qua"].Value).ToString();
-            textBox8.Text = dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_artname"].Value.ToString();
-            textBox7.Text = Convert.ToDouble(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_pricenet"].Value).ToString();
-            textBox3.Text = Convert.ToDouble(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_pricebrt"].Value).ToString();
+            if (dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_id"].Value.ToString() != "")
+            {
+                groupBox4.Visible = true;
+                button11.Visible = true;
+                button10.Visible = false;
+                textBox10.Text = Convert.ToInt32(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_id"].Value).ToString();
+                textBox11.Text = Convert.ToInt32(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_dhid"].Value).ToString();
+                textBox9.Text = Convert.ToInt32(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_qua"].Value).ToString();
+                textBox8.Text = dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_artname"].Value.ToString();
+                textBox7.Text = Convert.ToDouble(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_pricenet"].Value).ToString();
+                textBox3.Text = Convert.ToDouble(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_pricebrt"].Value).ToString();
+            }
+
         }
 
         //powrót do standardowego widoku pozycji transakcji
