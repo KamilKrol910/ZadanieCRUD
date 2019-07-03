@@ -66,7 +66,7 @@ namespace ZadanieCRUD
             DataTable ReadListTable = null;
 
             CConnectSQL ConnectSQL = new CConnectSQL();
-            ReadListTable = ConnectSQL.ReadTableFromSQL("select dl_id, dl_artname, dl_qua, dl_pricenet, dl_pricebrt, dl_dhid, MAX(dl_id) as maxID from dl_mdokl where dl_dhid = " + ID + " GROUP BY dl_id order by dl_id ");
+            ReadListTable = ConnectSQL.SQLReadData("select dl_id, dl_artname, dl_qua, dl_pricenet, dl_pricebrt, dl_dhid, MAX(dl_id) as maxID from dl_mdokl where dl_dhid = " + ID + " GROUP BY dl_id order by dl_id ");
             SaveTableAsList(ReadListTable); 
             return ReadListTable;
         }

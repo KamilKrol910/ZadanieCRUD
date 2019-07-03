@@ -23,7 +23,6 @@ namespace ZadanieCRUD
 
         void EditTransactionListLineViewON(CTransactionListLine EditListLine);
 
-
         int ReadTransactionID();
         string ReadTransactionName();
         int ReadTransactionCustNr();
@@ -56,11 +55,68 @@ namespace ZadanieCRUD
             InitializeComponent();
         }
 
+        private void FrmMainView_Load(object sender, EventArgs e)
+        {
+            Controller.ReadAllTransactionLine();
+        }
+
         public void AddListener(IControllerMain Controller_)
         {
             this.Controller = Controller_;
         }
 
+
+        //---------------------------------------------------------------------PRZYCISKI ZMIANY WIDOKU    
+
+        // do wprowadzenia nowej linii transakcji
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Controller.NewTransactionListLineViewON();
+        }
+
+        //Do edycji linii transakcji
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Controller.EditTransactionListLineViewON(dataGridView1.CurrentCell.RowIndex);
+        }
+
+        //Do usunięcia linii transakcji
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Controller.DeleteTransactionListLineViewON(dataGridView1.CurrentCell.RowIndex);
+        }
+
+        //powrót do startowego widoku
+        private void button9_Click(object sender, EventArgs e)
+        {
+            Controller.NewTransactionListLineViewOF();
+        }
+
+        //nowa pozycja transakcji
+        private void button8_Click(object sender, EventArgs e)
+        {
+            Controller.NewPositionLineViewON(dataGridView1.CurrentCell.RowIndex);
+        }
+
+        //edycja pozycji transakcji
+        private void button7_Click(object sender, EventArgs e)
+        {
+            Controller.EditPositionListLineViewON(Convert.ToInt32(dataGridView2.CurrentCell.RowIndex));
+        }
+
+        //usunięcie linii transakcji
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Controller.DeletePositionListLineViewON(Convert.ToInt32(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_id"].Value));
+        }
+
+        //powrót do standardowego widoku
+        private void button12_Click(object sender, EventArgs e)
+        {
+            Controller.NewPositionListLineViewOF();
+        }
+
+        //---------------------------------------------------------------------PRZYCISKI WYŚWIETLANIA DANYCH
         public void SetDataGridView1(DataTable DataSetGridView)
         {
             dataGridView1.DataSource = null;
@@ -77,13 +133,39 @@ namespace ZadanieCRUD
             dataGridView2.Refresh();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
 
-            Controller.NewTransactionListLineViewON();
-                     
+
+        //---------------------------------------------------------------------PRZYCISKI ZMIANY MODELU
+
+        //Nowa transakcja
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Controller.NewTransactionListLine();
         }
 
+        //edycja transakcji
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Controller.EditTransactionListLine();
+        }
+
+        //nowa transakcja
+        private void button10_Click(object sender, EventArgs e)
+        {
+            Controller.NewPositionListLine();
+        }
+
+        //edycja pozycji transakcji
+        private void button11_Click(object sender, EventArgs e)
+        {
+            Controller.EditPositionListLine();
+        }
+
+
+
+        //--------------------------------------------------------------------------------ZMIANY WIDOKU NA BAZIE MODELU
+
+        // Przygotowanie pól do wprowadzenia nowego wpisu transakcji
         public void NewTransactionListLineViewON(int NewID)
         {
             groupBox3.Visible = true;
@@ -92,11 +174,28 @@ namespace ZadanieCRUD
             button5.Visible = true;
             button4.Visible = false;
             textBox1.Text = NewID.ToString();
-
         }
 
+        // Przygotowanie pól do wprowadzenia nowego wpisu pozycji transakcji
+        public void NewPositionLineViewON(CTransactionListLine EditListLine)
+        {
+            groupBox4.Visible = true;
+            button10.Visible = true;
+            button11.Visible = false;
 
-       public void EditTransactionListLineViewON(CTransactionListLine EditListLine)
+            textBox11.Text = EditListLine.ID.ToString();
+            if (EditListLine.TransactionPosLine.Count == 0)
+            {
+                textBox10.Text = "1";
+            }
+            else
+            {
+                textBox10.Text = (EditListLine.TransactionPosLine[EditListLine.TransactionPosLine.Count - 1].MaxID + 1).ToString();
+            }
+        }
+
+        //Uzupełnie pól edycji transakcji na bazie zaznaczonego rekordu
+        public void EditTransactionListLineViewON(CTransactionListLine EditListLine)
         {
             groupBox3.Visible = true;
             groupBox2.Visible = true;
@@ -106,12 +205,34 @@ namespace ZadanieCRUD
             textBox1.Text = EditListLine.ID.ToString();
             textBox2.Text = EditListLine.CustNumber.ToString();
             textBox4.Text = EditListLine.Name.ToString();
-            textBox5.Text = EditListLine.PriceNet.ToString();
-            textBox6.Text = EditListLine.PriceBrt.ToString();
+            textBox5.Text = Math.Round(EditListLine.PriceNet,2).ToString();
+            textBox6.Text = Math.Round(EditListLine.PriceBrt,2).ToString();
             if (EditListLine.Datin > DateTime.MinValue)
             { dateTimePicker1.Value = EditListLine.Datin; }           
         }
 
+
+        //Uzupełnie pól edycji pozycji transakcji na bazie zaznaczonego rekordu
+        public void EditPositionListLineViewON(int RowLine)
+        {
+            groupBox4.Visible = true;
+            button11.Visible = true;
+            button10.Visible = false;
+            textBox10.Text = Convert.ToInt32(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_id"].Value).ToString();
+            textBox11.Text = Convert.ToInt32(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_dhid"].Value).ToString();
+            textBox9.Text = Convert.ToInt32(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_qua"].Value).ToString();
+            textBox8.Text = dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_artname"].Value.ToString();
+            textBox7.Text = Convert.ToDouble(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_pricenet"].Value).ToString();
+            textBox3.Text = Convert.ToDouble(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_pricebrt"].Value).ToString();
+        }
+
+        //powrót do standardowego widoku pozycji transakcji
+        public void NewPositionListLineViewOF()
+        {
+            groupBox4.Visible = false;
+        }
+
+        //powrót do standardowego widoku transakcji
         public void NewTransactionListLineViewOF()
         {
             groupBox3.Visible = false;
@@ -121,42 +242,10 @@ namespace ZadanieCRUD
 
 
 
-
-        private void button2_Click(object sender, EventArgs e)
+        //------------------------------------------------------------------------METODY SŁUŻACE DO ODCZYTU DANYCH Z TEXTBOX
+        public int ReadTransactionID()
         {
-           Controller.EditTransactionListLineViewON(dataGridView1.CurrentCell.RowIndex);
-        }
-
-        private void FrmMainView_Load(object sender, EventArgs e)
-        {
-            Controller.ReadAllTransactionLine();
-        }
-
-
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            Controller.NewTransactionListLine();
-        }
-
-        private void button9_Click(object sender, EventArgs e)
-        {
-            Controller.NewTransactionListLineViewOF();
-        }
-
-
-
-       public int ReadTransactionID(){
-            int n;
-            bool isNumeric = int.TryParse(textBox1.Text, out n);
-            if (isNumeric)
-            {
-                return Convert.ToInt32(textBox1.Text);
-            }
-            else
-            {
-                return 0;
-            }
+       return SCFunction.ConvertStringToInt(textBox1.Text);
         }
         public string ReadTransactionName()
         {
@@ -165,218 +254,46 @@ namespace ZadanieCRUD
 
         public int ReadTransactionCustNr()
         {
-            int n;
-            bool isNumeric = int.TryParse(textBox2.Text, out n);
-            if (isNumeric)
-            {
-                return Convert.ToInt32(textBox2.Text);
-            }
-            else
-            {
-                return 0;
-            }
+            return SCFunction.ConvertStringToInt(textBox2.Text);
         }
 
         public double ReadTransactionPriceNet()
         {
-            double n;
-            if (Double.TryParse(textBox5.Text.Replace(",", "."), out n))
-            {
-                return Convert.ToDouble(textBox5.Text.Replace(",", "."));
-                
-            }
-            else
-            {
-                return 0;
-            }
+            return SCFunction.ConvertStringToDouble(textBox5.Text);
         }
         public double ReadTransactionPriceBrt()
         {
-            double n;
-            //MessageBox.Show(isDouble.ToString());
-            if (Double.TryParse(textBox6.Text.Replace(",", "."), out n))
-            {
-                
-                return Convert.ToDouble(textBox6.Text.Replace(",", "."));
-            }
-            else
-            {
-                return 0;
-            }
+            return SCFunction.ConvertStringToDouble(textBox6.Text);
         }
         public DateTime ReadTransactionDate()
         {
             return Convert.ToDateTime(dateTimePicker1.Value);
-
         }
-
-
-        private void button4_Click(object sender, EventArgs e)
+        public int ReadPositionID()
         {
-            Controller.EditTransactionListLine();
+            return SCFunction.ConvertStringToInt(textBox10.Text);
         }
-
-        private void groupBox1_Enter(object sender, EventArgs e)
+        public int ReadPosTrID()
         {
-
+            return SCFunction.ConvertStringToInt(textBox11.Text);
         }
-
-        private void button3_Click(object sender, EventArgs e)
-        {        
-                Controller.DeleteTransactionListLineViewON(dataGridView1.CurrentCell.RowIndex);
-        }
-
-
-
-        private void button11_Click(object sender, EventArgs e)
+        public string ReadArtNumber()
         {
-            Controller.EditPositionListLine();
-        }
-
-        private void button8_Click(object sender, EventArgs e)
-        {
-            Controller.NewPositionLineViewON(dataGridView1.CurrentCell.RowIndex);
-        }
-
-
-        public void NewPositionLineViewON(CTransactionListLine EditListLine)
-        {
-            groupBox4.Visible = true;
-            button10.Visible = true;
-            button11.Visible = false;
-
-            textBox11.Text = EditListLine.ID.ToString();
-            if (EditListLine.TransactionPosLine.Count ==0)
-            {
-                textBox10.Text = "1";
-            }
-            else
-            {
-                textBox10.Text = (EditListLine.TransactionPosLine[EditListLine.TransactionPosLine.Count - 1].MaxID+1).ToString();
-            }
-
-        }
-
-        private void button10_Click(object sender, EventArgs e)
-        {
-            Controller.NewPositionListLine();
-        }
-
-        public int ReadPositionID() {
-            int n;
-            bool isNumeric = int.TryParse(textBox10.Text, out n);
-            if (isNumeric)
-            {
-                return Convert.ToInt32(textBox10.Text);
-            }
-            else
-            {
-                return 0;
-            }
-        }
-        public int ReadPosTrID() {
-            int n;
-            bool isNumeric = int.TryParse(textBox11.Text, out n);
-            if (isNumeric)
-            {
-                return Convert.ToInt32(textBox11.Text);
-            }
-            else
-            {
-                return 0;
-            }
-        }
-        public string ReadArtNumber() {
             return textBox8.Text;
         }
         public int ReadPositionQuantity()
         {
-            int n;
-            bool isNumeric = int.TryParse(textBox9.Text, out n);
-            if (isNumeric)
-            {
-                return Convert.ToInt32(textBox9.Text);
-            }
-            else
-            {
-                return 0;
-            }
+            return SCFunction.ConvertStringToInt(textBox9.Text);
         }
         public double ReadPositionPriceNet()
         {
-            double n;
-            //MessageBox.Show(isDouble.ToString());
-            if (Double.TryParse(textBox7.Text.Replace(",", "."), out n))
-            {
-
-                return Convert.ToDouble(textBox7.Text.Replace(",", "."));
-            }
-            else
-            {
-                return 0;
-            }
+            return SCFunction.ConvertStringToDouble(textBox7.Text);
         }
         public double ReadPositionPriceBrt()
         {
-            double n;
-            //MessageBox.Show(isDouble.ToString());
-            if (Double.TryParse(textBox3.Text.Replace(",", "."), out n))
-            {
-
-                return Convert.ToDouble(textBox3.Text.Replace(",", "."));
-            }
-            else
-            {
-                return 0;
-            }
+            return SCFunction.ConvertStringToDouble(textBox3.Text);
         }
 
-
-
-        private void button6_Click(object sender, EventArgs e)
-        {           
-             Controller.DeletePositionListLineViewON(Convert.ToInt32(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_id"].Value));
-        }
-
-        private void button7_Click(object sender, EventArgs e)
-        {
-            Controller.EditPositionListLineViewON(Convert.ToInt32(dataGridView2.CurrentCell.RowIndex));
-        }
-
-       public void EditPositionListLineViewON (int RowLine)
-        {
-            groupBox4.Visible = true;
-            button11.Visible = true;
-            button10.Visible = false;
-            textBox10.Text =  Convert.ToInt32(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_id"].Value).ToString();
-            textBox11.Text = Convert.ToInt32(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_dhid"].Value).ToString();
-            textBox9.Text = Convert.ToInt32(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_qua"].Value).ToString();
-            textBox8.Text = dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_artname"].Value.ToString();
-            textBox7.Text = Convert.ToDouble(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_pricenet"].Value).ToString();
-            textBox3.Text = Convert.ToDouble(dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells["dl_pricebrt"].Value).ToString();
-        }
-
-        private void button13_Click(object sender, EventArgs e)
-        {
-            
-            double val;
-            if (Double.TryParse(textBox6.Text, out val))
-            {
-                MessageBox.Show("Liczba");
-            }
-
-
-
-            }
-
-        private void button12_Click(object sender, EventArgs e)
-        {
-            Controller.NewPositionListLineViewOF();
-        }
-
-        public void NewPositionListLineViewOF() {
-            groupBox4.Visible = false;
-
-        }
     }
+
 }

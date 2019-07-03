@@ -45,7 +45,7 @@ namespace ZadanieCRUD
             DataTable ReadListTable = null;
 
             CConnectSQL ConnectSQL = new CConnectSQL();
-            ReadListTable = ConnectSQL.ReadTableFromSQL("select * from dh_mdokh where dh_id > 0 order by dh_id");
+            ReadListTable = ConnectSQL.SQLReadData("select * from dh_mdokh where dh_id > 0 order by dh_id");
             SaveTableAsList(ReadListTable);
        
             return ReadListTable;
@@ -77,6 +77,7 @@ namespace ZadanieCRUD
 
         private void SaveTableAsList (DataTable ReadTable)
         {
+            TransactionListLine.Clear();
             foreach (DataRow dr2 in ReadTable.Rows)
             {
                 if (!DBNull.Value.Equals(dr2["dh_id"]))
@@ -94,12 +95,6 @@ namespace ZadanieCRUD
 
         }
 
-      
-
-
-      
-
-
         public bool CreateListLine(int ID, DateTime DATIN, string Name, int CustNR, double PriceNET, double PriceBRT) {
             if (ID ==0 )
             {
@@ -107,9 +102,10 @@ namespace ZadanieCRUD
             }
             else
             {
-                string Request = "insert into dh_mdokh(dh_id,dh_datin, dh_name, dh_custnr , dh_pricenet, dh_pricebrt) values(" + ID + ",'" + DATIN + "','"+ Name + "',"+ CustNR +" ,"+ PriceNET + "," + PriceBRT + ");";
+                string Request = "insert into dh_mdokh(dh_id,dh_datin, dh_name, dh_custnr , dh_pricenet, dh_pricebrt) values(" + ID + ",'" + DATIN + "','"+ Name + "',"+ CustNR +" ,"+ PriceNET.ToString().Replace(",", ".") + "," + PriceBRT.ToString().Replace(",",".") + ");";
+                MessageBox.Show(Request);
                 CConnectSQL ConnectSQL = new CConnectSQL();
-                return ConnectSQL.InsertData(Request);
+                return ConnectSQL.SQLQueryExc(Request);
             }
         }
 
@@ -121,9 +117,9 @@ namespace ZadanieCRUD
             }
             else
             {
-                string Request = "insert into dl_mdokl(dl_id, dl_artname, dl_qua, dl_dhid , dl_pricenet, dl_pricebrt) values(" + ID + ",'" + ArtName + "'," + Quantity + "," + MAINID + " ," + PriceNet + "," + PriceBrt + ");";
+                string Request = "insert into dl_mdokl(dl_id, dl_artname, dl_qua, dl_dhid , dl_pricenet, dl_pricebrt) values(" + ID + ",'" + ArtName + "'," + Quantity + "," + MAINID + " ," + PriceNet.ToString().Replace(",", ".") + "," + PriceBrt.ToString().Replace(",", ".") + ");";
                 CConnectSQL ConnectSQL = new CConnectSQL();
-                return ConnectSQL.InsertData(Request);
+                return ConnectSQL.SQLQueryExc(Request);
             }
 
         }
@@ -137,9 +133,9 @@ namespace ZadanieCRUD
             }
             else
             {               
-                string Request = "Update dh_mdokh SET dh_id = "+ ID + " , dh_datin = '" + DATIN + "', dh_name = '"+ Name + "', dh_custnr = " + CustNR + " , dh_pricenet = " + PriceNET + ", dh_pricebrt = " + PriceBRT + " where dh_id = " + ID + " ;";
+                string Request = "Update dh_mdokh SET dh_id = "+ ID + " , dh_datin = '" + DATIN + "', dh_name = '"+ Name + "', dh_custnr = " + CustNR + " , dh_pricenet = " + PriceNET.ToString().Replace(",", ".") + ", dh_pricebrt = " + PriceBRT.ToString().Replace(",", ".") + " where dh_id = " + ID + " ;";
                 CConnectSQL ConnectSQL = new CConnectSQL();
-                return ConnectSQL.InsertData(Request);
+                return ConnectSQL.SQLQueryExc(Request);
             }
             
         }
@@ -152,13 +148,10 @@ namespace ZadanieCRUD
             }
             else
             {
-                string Request = "Update dl_mdokl SET dl_id = " + ID + " , dl_dhid = " + MAINID + ", dl_artname = '" + ArtName + "', dl_qua = " + Quantity + " , dl_pricenet = " + PriceNet + ", dl_pricebrt = " + PriceBrt + " where dl_id = " + ID + " ;";
+                string Request = "Update dl_mdokl SET dl_id = " + ID + " , dl_dhid = " + MAINID + ", dl_artname = '" + ArtName + "', dl_qua = " + Quantity + " , dl_pricenet = " + PriceNet.ToString().Replace(",", ".") + ", dl_pricebrt = " + PriceBrt.ToString().Replace(",", ".") + " where dl_id = " + ID + " ;";
                 CConnectSQL ConnectSQL = new CConnectSQL();
-                return ConnectSQL.InsertData(Request);
+                return ConnectSQL.SQLQueryExc(Request);
             }
-
-
-
         }
 
 
@@ -173,7 +166,7 @@ namespace ZadanieCRUD
             {
                 string Request = "DELETE FROM dh_mdokh WHERE dh_id = " + DeletedID + ";";
                 CConnectSQL ConnectSQL = new CConnectSQL();
-                return ConnectSQL.InsertData(Request);
+                return ConnectSQL.SQLQueryExc(Request);
             }
 
 
@@ -195,7 +188,7 @@ namespace ZadanieCRUD
             {
                 string Request = "DELETE FROM dl_mdokl WHERE dl_id = " + DeletedID + ";";
                 CConnectSQL ConnectSQL = new CConnectSQL();
-                return ConnectSQL.InsertData(Request);
+                return ConnectSQL.SQLQueryExc(Request);
             }
 
 

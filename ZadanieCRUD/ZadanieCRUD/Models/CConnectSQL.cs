@@ -12,8 +12,6 @@ namespace ZadanieCRUD
     class CConnectSQL
     {
 
-
-
         /// <summary>
         /// 
         /// </summary>
@@ -25,8 +23,6 @@ namespace ZadanieCRUD
         /// </summary>
         private MySqlDataAdapter mySqlDataAdapter;
 
-
-
         /// <summary>
         /// Konstruktor klasy
         /// </summary>
@@ -35,8 +31,7 @@ namespace ZadanieCRUD
 
         }
 
-
-        public DataTable ReadTableFromSQL(string request)
+        public DataTable SQLReadData(string request)
         {
             DataTable Result = null;
 
@@ -50,39 +45,26 @@ namespace ZadanieCRUD
                 mySqlDataAdapter = new MySqlDataAdapter(request, connection);
                 DataSet DS = new DataSet();
                 mySqlDataAdapter.Fill(DS);
-                //MessageBox.Show(DS.Tables[0].Rows[0]["cdb_var"].ToString());
 
                 Result = DS.Tables[0];
-
-                //close connection
                 this.CloseConnection();
-
             }
-
-
-
-
             return Result;
         }
 
 
 
-        public bool InsertData(string Query_)
+        public bool SQLQueryExc(string Query_)
         {
             try
             {
-                //This is my connection string i have assigned the database file address path  
                 string MyConnection2 = "datasource=localhost;database=RekturacjadB;username=root;password=!QAZxsw2";
-                //This is my insert query in which i am taking input from the user through windows forms  
                 string Query = Query_;
-                //This is  MySqlConnection here i have created the object and pass my connection string.  
                 MySqlConnection MyConn2 = new MySqlConnection(MyConnection2);
-                //This is command class which will handle the query and connection object.  
                 MySqlCommand MyCommand2 = new MySqlCommand(Query, MyConn2);
                 MySqlDataReader MyReader2;
                 MyConn2.Open();
-                MyReader2 = MyCommand2.ExecuteReader();     // Here our query will be executed and data saved into the database.  
-                //MessageBox.Show("Save Data");
+                MyReader2 = MyCommand2.ExecuteReader();    
                 while (MyReader2.Read())
                 {
                 }
@@ -110,15 +92,13 @@ private bool OpenConnection()
             catch (MySqlException ex)
             {
 
-                //0: Cannot connect to server.
-                //1045: Invalid user name and/or password.
                 switch (ex.Number)
                 {
                     case 0:
-                        MessageBox.Show("Cannot connect to server. Contact administrator");
+                        MessageBox.Show("Nie można połączyć się z bazą danych SQL. Skontaktuj się z administratorem.");
                         break;
                     case 1045:
-                        MessageBox.Show("Invalid username/password, please try again");
+                        MessageBox.Show("Niepoprawny numer użytkownika/hasło");
                         break;
                     default:
                         MessageBox.Show(ex.Message);
