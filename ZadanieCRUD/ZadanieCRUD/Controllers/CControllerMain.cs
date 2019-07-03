@@ -199,7 +199,9 @@ namespace ZadanieCRUD
             DialogResult dialogResult = MessageBox.Show("Czy chcesz usunąć zaznaczony record?", "Usunięcie wpisu w bazie danych", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
+                TransactionList.DeletePosLines(RowLine);
                 DeleteTransactionListLine(RowLine);
+
             }
             else if (dialogResult == DialogResult.No)
             {

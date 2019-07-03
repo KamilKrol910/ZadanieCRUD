@@ -18,15 +18,13 @@ namespace ZadanieCRUD
         bool CreateListLine(int ID, DateTime DATIN, string Name, int CustNR, double PriceNET, double PriceBRT);
         bool CreatePosLine(int ID, int MAINID, string ArtName, int Quantity, double PriceNet, double PriceBrt);
 
-
-
         bool EditListLine(int ID, DateTime DATIN, string Name, int CustNR, double PriceNET, double PriceBRT);
         bool EditPosLine(int ID, int MAINID, string ArtName, int Quantity, double PriceNet, double PriceBrt);
         CTransactionListLine GetTransactionList(int RowLine);
 
         bool DeleteListLine(int RowLine);
         bool DeletePosLine(int RowLine);
-        
+        bool DeletePosLines(int RowLine);
 
     }
 
@@ -169,15 +167,32 @@ namespace ZadanieCRUD
                 CConnectSQL ConnectSQL = new CConnectSQL();
                 return ConnectSQL.SQLQueryExc(Request);
             }
+        }
+
+
+        public bool DeletePosLines(int RowLine)
+        {
+            int DeletedID = TransactionListLine[RowLine].ID;
+
+            if (DeletedID == 0)
+            {
+                return false;
+            }
+            else
+            {
+                string Request = "DELETE FROM dl_mdokl WHERE dl_dhid = " + DeletedID + ";";
+                CConnectSQL ConnectSQL = new CConnectSQL();
+                return ConnectSQL.SQLQueryExc(Request);
+            }
 
 
 
         }
 
-        
 
 
-                    public bool DeletePosLine(int RowLine)
+
+        public bool DeletePosLine(int RowLine)
         {
             int DeletedID = RowLine;
 
